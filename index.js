@@ -29,8 +29,13 @@ async function run() {
     const database = client.db("productsDB");
     const sportsCollection = database.collection("sportsCollection");
 
-    app.get('/sports', async (req, res) => {
-        const cursor = sportsCollection.find();
+    app.get('/sportslimit', async (req, res) => {
+        const cursor = sportsCollection.find().limit(6);;
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/sportsall', async (req, res) => {
+        const cursor = sportsCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
