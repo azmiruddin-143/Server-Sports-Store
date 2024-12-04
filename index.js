@@ -26,6 +26,17 @@ async function run() {
     // await client.connect();
         
     //    Start //
+
+
+    const database = client.db("Sports");
+    const sportsCollection = database.collection("SportsData");
+
+
+    app.post('/sports', async (req, res) => {
+        const sportsBody = req.body
+        const result = await sportsCollection.insertOne(sportsBody);
+        res.send(result)
+    })
      
 
 
