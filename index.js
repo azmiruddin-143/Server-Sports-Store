@@ -9,7 +9,7 @@ app.use(express.json())
 
 // mongodb setup//
 
-const uri = `mongodb+srv://${process.env.DB_SPORTSUSSER}:{${process.env.DB_SPORTSPASS}@cluster0.phy8j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_SPORTSUSSER}:${process.env.DB_SPORTSPASS}@cluster0.phy8j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -26,19 +26,21 @@ async function run() {
     // await client.connect();
         
     //    Start //
+    const database = client.db("productsDB");
+    const sportsCollection = database.collection("sportsCollection");
 
-
-    const database = client.db("Sports");
-    const sportsCollection = database.collection("SportsData");
-
-
-    app.post('/sports', async (req, res) => {
-        const sportsBody = req.body
-        const result = await sportsCollection.insertOne(sportsBody);
+    app.get('/sports', async (req, res) => {
+        const cursor = sportsCollection.find();
+        const result = await cursor.toArray()
         res.send(result)
     })
-     
 
+     app.post('/sports', async (req,res) =>{
+        const sportsbody = req.body
+        const result = await sportsCollection.insertOne(sportsbody);
+        res.send(result)
+
+     })
 
 
     // Send a ping to confirm a successful connection
