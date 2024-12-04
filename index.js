@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express()
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000
 const cors = require('cors');
 app.use(cors())
@@ -29,6 +29,13 @@ async function run() {
     const database = client.db("productsDB");
     const sportsCollection = database.collection("sportsCollection");
 
+    app.post('/sports', async (req,res) =>{
+        const sportsbody = req.body
+        const result = await sportsCollection.insertOne(sportsbody);
+        res.send(result)
+
+     })
+
     app.get('/sportslimit', async (req, res) => {
         const cursor = sportsCollection.find().limit(6);;
         const result = await cursor.toArray()
@@ -40,12 +47,13 @@ async function run() {
         res.send(result)
     })
 
-     app.post('/sports', async (req,res) =>{
-        const sportsbody = req.body
-        const result = await sportsCollection.insertOne(sportsbody);
+    
+     app.get("/sportsall/:id", async (req, res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id) };
+        const result = await sportsCollection.findOne(query);
         res.send(result)
-
-     })
+    })
 
 
     // Send a ping to confirm a successful connection
