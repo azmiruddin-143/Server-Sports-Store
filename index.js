@@ -35,12 +35,13 @@ async function run() {
       res.send(result)
 
     })
-
     app.get('/sportslimit', async (req, res) => {
-      const cursor = sportsCollection.find().limit(6);;
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+      const cursor = sportsCollection.find().sort({ createdAt: -1 }).limit(6);  // Sort by creation date in descending order
+      const result = await cursor.toArray();  // Convert the cursor into an array
+      res.send(result);  // Send the result to the client
+    });
+
+    
     app.get('/sportsall', async (req, res) => {
       const cursor = sportsCollection.find()
       const result = await cursor.toArray()
@@ -90,14 +91,14 @@ async function run() {
       const upBody = req.body
       const updateDoc = {
         $set: {
-           image: upBody.image,
-           productName: upBody.productName,
-           category: upBody.category,
-           price: upBody.price,
-           rating: upBody.rating,
-           selectedDate: upBody.selectedDate,
-           email: upBody.email,
-           userName: upBody.userName
+          image: upBody.image,
+          productName: upBody.productName,
+          category: upBody.category,
+          price: upBody.price,
+          rating: upBody.rating,
+          selectedDate: upBody.selectedDate,
+          email: upBody.email,
+          userName: upBody.userName
 
         }
       }
