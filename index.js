@@ -55,16 +55,22 @@ async function run() {
         res.send(result)
     })
 
-    app.get('/my-equipment', async (req, res) => {
-        const email = req.query.email; // Get email from query params
+    app.get('/myequipment', async (req, res) => {
+        const email = req.query.email; 
         if (!email) {
           return res.status(400).send({ message: "Email is required" });
         }
-        const query = { email: email }; // Filter by email
+        const query = { email: email }; 
         const result = await sportsCollection.find(query).toArray();
         res.send(result);
       });
       
+      app.delete('/myequipment/:id', async (req,res) => {
+        const id = req.params.id
+        const query = { _id: new ObjectId(id) };
+        const result = await sportsCollection.deleteOne(query);
+        res.send(result)
+      })
     
 
 
