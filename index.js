@@ -48,6 +48,22 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/sportSort', async (req, res) => {
+      const cursor = sportsCollection.aggregate([
+        {
+          $addFields: {
+            price: { $toDouble: "$price" }  
+          }
+        },
+        {
+          $sort: { "price": 1 }  
+        }
+      ]);
+    
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    
 
     app.get("/sportsall/:id", async (req, res) => {
       const id = req.params.id
